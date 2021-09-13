@@ -1,50 +1,49 @@
 <template>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Id</th>
-        <th>Date</th>
-        <th>Titre</th>
-        <th>Detail</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="(donnee, index) in donnees" :key="index">
-          <td>{{index+1}}</td>
-          <td>{{donnee.date}}</td>
-          <td>{{donnee.titre}}</td>
-          <td>{{donnee.detail}}</td>
-      </tr>
-    </tbody>
-  </table>
+        <span v-bind:title="title"></span>
+        <p> {{ message }} </p>
+        <input v-model="inputField" placeholder="Saisissez un code UF">
+        <button v-on:click="callServer">OK</button>
+        <p> {{ processingMessage }} {{ serverResult }} </p>
 </template>
 
 <script>
 export default {
   name: "Bonsai",
-  data() {
-    return {
-                donnees:[
-                    { date : "22/08/1966", titre : "Star Wars", detail : "Un detail comme un autre"},
-                    { date : "24/04/1986", titre : "Star Wars", detail : "Un detail comme un autre"},
-                    { date : "27/10/1946", titre : "Star Wars", detail : "Un detail comme un autre"},
-                    { date : "28/11/1936", titre : "Star Wars", detail : "Un detail comme un autre"},
-                    { date : "29/12/1926", titre : "Star Wars", detail : "Un detail comme un autre"},
-                    { date : "22/02/1916", titre : "Star Wars", detail : "Un detail comme un autre"},
-                    { date : "14/09/1996", titre : "Star Wars", detail : "Un detail comme un autre"},
-                    { date : "12/08/1906", titre : "Star Wars", detail : "Un detail comme un autre"},
-                    { date : "23/07/1936", titre : "Star Wars", detail : "Un detail comme un autre"},
-                        ]  
-            }   
-  },
-  methods : {
-    callServer: function(){
-      this.processingMessage = `Recherche en cours sur http://localhost:3000/structure/${this.inputField}`;
-      fetch(`http://localhost:3000/structure/${this.inputField}`)
-      .then(response => response.json()
-      .then(res))
-    }
-  }
+    data(){
+        return {
+          
+                title: 'Page de test Structure',
+                message: "Bienvenue sur la page de test d'interrogation de la structure",
+                inputField: "",
+                serverResult: "",
+                processingMessage: "",
+                tab : []
+            
+       }
+
+    },  
+  
+ methods: {
+                callServer: function () {
+                    console.log("tot");
+                    this.processingMessage = `Recherche en cours sur http://vlp042chr:3000/api/bonsai/?code_uf=${this.inputField}`;
+                    fetch(`http://localhost:8080/api/bonsai/`)
+                      .then(response => console.log(response.json()))
+                        /*.then(response => response.json())
+                        .then(response => {
+                            if ( Object.keys(response).length > 0 ) {
+                              console.log("Zooooo");
+                                this.serverResult = JSON.stringify(response)
+                            }
+                            else {
+                                this.serverResult = "Aucune structure correspondante trouvée"
+                            }
+                            this.processingMessage = ""
+                        })*/
+                        .catch(error => alert("Erreur : " + error ));
+                }
+                
+            }
 };
 </script>
 
