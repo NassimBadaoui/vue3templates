@@ -27,6 +27,9 @@
         <li class="nav-item">
           <a class="nav-link" href="#" tabindex="-1" aria-disabled="false"><router-link to="/bonsai">Bonsai</router-link></a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" tabindex="-1" aria-disabled="false"><router-link to="/sia">Sia</router-link></a>
+        </li>
       </ul>
       <form class="d-flex">
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">

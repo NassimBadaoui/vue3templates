@@ -73,7 +73,7 @@ export default {
 
     callServer: function() { 
       this.axios.get(`http://vlp042chr:3000/api/bonsai/?code_uf=${this.inputField}`, { crossdomain: true })
-                  .then(response => { 
+                  .then(response => {
           this.tabs.push(response.data);
           console.log(response); 
           console.log(this.tabs); 
