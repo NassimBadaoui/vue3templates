@@ -1,8 +1,10 @@
+
 <template>
         <span v-bind:title="title"></span>
         <p> {{ message }} </p>
         <input v-model="inputField" placeholder="Saisissez un code UF">
         <button v-on:click="callServer">OK</button>
+        <button v-on:click="callServer">LoadDataFromBase</button>
         <p> {{ processingMessage }} {{ serverResult }} </p>
 
           <table class="table">
@@ -48,6 +50,7 @@
 
 <script>
 export default {
+
   name: "Bonsai",
     data(){
         return {
@@ -63,12 +66,6 @@ export default {
 
     },  
   
-  created(){
-       this.axios.get('https://opentdb.com/api.php?amount=1&category=18')
-                  .then((response) => {
-                      console.log(response.data)
-                  })
-  }, 
   methods : {
 
     callServer: function() { 
@@ -81,6 +78,7 @@ export default {
           }).catch(error => {
                 console.log(error.response)
           })
+
               }
 
   }
