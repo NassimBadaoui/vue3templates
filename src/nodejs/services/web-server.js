@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const http = require('http');
 const express = require('express');
+const cors = require('cors');
 const morgan = require('morgan');
 const webServerConfig = require('../config/web-server.js');
 const router = require('./dbRouter.js');
@@ -28,6 +29,7 @@ function initApp() {
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
   app.use(morgan('combined'));
+  app.use(cors());
   app.use('/api', router);
   return app;
 }

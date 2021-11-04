@@ -18,20 +18,14 @@ async function find(context) {
 module.exports.find = find;
 
 const INSERT_SQL =
-  "INSERT INTO KIM_RESA(UTIL, EQUIPE, HEURE)\n"+
-  "VALUES (:util, :equipe, :heure)\n"+
-  "RETURNING UTIL INTO :conId";
+  "INSERT INTO KIM_RESA(UTIL, EQUIPE)\n"+
+  "VALUES (:util, :equipe)";
+  /*"RETURNING UTIL INTO :conId";*/
 
 async function create(conn) {
   const conDesc = Object.assign({}, conn); 
-  conDesc.conId = {
-    dir: oracledb.BIND_OUT,
-    type: oracledb.NUMBER
-  }
-  delete conDesc.creationDate;
-  delete conDesc.updateDate;
   const result = await database.simpleExecute(INSERT_SQL, conDesc);
-  conDesc.conId = result.outBinds.conId[0];
+  //conDesc.conId = result.outBinds.conId[0];
   return conDesc;
 }
 
@@ -39,10 +33,8 @@ module.exports.create = create;
 
 const UPDATE_SQL =
  "UPDATE KIM_RESA\n" +
- "  SET UTIL = :util,\n" +
- "      EQUIPE = :equipe,\n" +
- "      HEURE = :heure,\n" +
- "WHERE UTIL = :conId";
+ "  SET EQUIPE = :equipe\n" +
+ "WHERE UTIL = :util";
 
 async function update(conn) {
   const conDesc = Object.assign({}, conn);
@@ -61,9 +53,9 @@ module.exports.update = update;
 const DELETE_SQL =
  'DELETE FROM KIM_RESA WHERE UTIL = :util';
 
-async function del(conId) {
+async function del(util) {
   const connDesc = {
-    conId: conId
+    util: util
   };
   const result = await database.simpleExecute(DELETE_SQL, connDesc);
   return result.rowsAffected === 1;

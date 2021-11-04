@@ -2,7 +2,10 @@
         <span v-bind:title="title"></span>
         <p> {{ message }} </p>
         <input v-model="inputField" placeholder="Saisissez un code UF">
-        <button v-on:click="callServer">OK</button>
+        <button v-on:click="callServer">GET</button>
+        <button v-on:click="post">POST</button>
+        <button v-on:click="put">PUT</button>
+        <button v-on:click="del">DELETE</button>
         <p> {{ processingMessage }} {{ serverResult }} </p>
 
           <table class="table">
@@ -47,6 +50,9 @@
 </template>
 
 <script>
+//import formJson from './fichier.json'
+
+
 export default {
   name: "Bonsai",
     data(){
@@ -57,14 +63,21 @@ export default {
                 inputField: "",
                 serverResult: "",
                 processingMessage: "",
-                tabs : []
+                tabs : [],
+                form : {
+                  util : "huihe",
+                  equipe : "xererD"
+                  
+                }
+               
             
        }
 
     },  
   
   created(){
-       this.axios.get('https://opentdb.com/api.php?amount=1&category=18')
+       //this.axios.get('https://opentdb.com/api.php?amount=1&category=18')
+       this.axios.get('http://localhost:3000/api/sia/')
                   .then((response) => {
                       console.log(response.data)
                   })
@@ -81,9 +94,82 @@ export default {
           }).catch(error => {
                 console.log(error.response)
           })
+              },
+              post: function() { 
+            
+      /*this.axios.post(`http://localhost:3000/api/sia/`, conDesc , { crossdomain: true })
+                  .then(response => {
+          this.tabs.push(response.data);
+          console.log(response); 
+          console.log(this.tabs); 
+          return response;
+          }).catch(error => {
+                console.log(error.response)
+          })
+
+        var optionAxios = { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } };
+
+        console.log(form);
+
+      
+        /*
+        let formData = new FormData();
+
+        formData.append('util', 'name');
+        formData.append('equipe', 'date');
+
+       var items = {};
+                      items["util"]="some value";
+                      items["equipe"]="some other value";
+                      const jsonString = JSON.stringify(Object.assign({}, items)) 
+                      const json_obj = JSON.parse(jsonString);
+                      console.log(json_obj);*/
+
+       
+          //var optionAxios = { headers: { 'content-type': 'text/json' } };
+          this.axios.post(`http://localhost:3000/api/sia/`, this.form) //, optionAxios)
+                .then(response => {
+                    console.log(response);
+
+                }).catch(error => {
+                console.log(error.response)
+                })
+
+             
+                  /*fetch(`http://localhost:3000/api/sia/`, 
+                        {method: 'POST', body: formData})
+                    //.then(res => res.json())
+                    .then(response => {
+                    console.log(response);
+
+                }).catch(error => {
+                console.log(error.response)
+                })*/
+              }, 
+
+              del: function() {
+                var optionAxios = { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } };
+                this.axios.delete(`http://localhost:3000/api/sia/?util=jkj`, optionAxios)
+                .then(response => {
+                    console.log(response);
+
+                }).catch(error => {
+                console.log(error.response)
+                })
+               },
+              put: function() { 
+                this.axios.put(`http://localhost:3000/api/sia/`, this.form)
+                .then(response => {
+                    console.log(response);
+
+                }).catch(error => {
+                console.log(error.response)
+                })
               }
 
   }
+
+   
 };
 </script>
 

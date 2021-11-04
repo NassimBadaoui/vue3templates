@@ -1,10 +1,10 @@
-const dimco = require('../databases/sia.js');
+const sia = require('../databases/sia.js');
  
 /**
- * @api {get} /dimco/:nom Demande les informations de la connexion
+ * @api {get} /sia/:nom Demande les informations de la connexion
  * @apiVersion 1.0.0
  * @apiName GetConnection
- * @apiGroup dimco
+ * @apiGroup sia
  *
  * @apiParam {String} nom  Nom de la connexion.
  *
@@ -38,7 +38,7 @@ const dimco = require('../databases/sia.js');
   try {
     const context = {};
     context.conName = req.query.nom;
-    const rows = await dimco.find(context);
+    const rows = await sia.find(context);
     if (req.params.nom) {
       if (rows.length === 1) {
         res.status(200).json(rows[0]);
@@ -59,17 +59,16 @@ function getConnectionFromRec(req) {
   const conDesc = {
     util: req.body.util,
     equipe: req.body.equipe,
-    heure: req.body.heure, // "user" n'est pas utilisable ORA-01036
   };
 
   return conDesc;
 }
 
 /**
- * @api {post} /dimco/ Création d'une connexion
+ * @api {post} /sia/ Création d'une connexion
  * @apiVersion 1.0.0
  * @apiName PostConnection
- * @apiGroup dimco
+ * @apiGroup sia
  *
  * @apiParam {String} NOM_CO  Nom de la connexion
  * @apiParam {String} NOM_UTIL  Nom de connexion
@@ -100,10 +99,21 @@ function getConnectionFromRec(req) {
  *     [{"ID_CO":12,"NOM_CO":"dim","NOM_UTIL":"dim","MDP_UTIL":"abcdef","PILOTE":"oracle.jdbc.driver.OracleDriver","URL_CO":"(DESCRIPTION =(ADDRESS_LIST = (LOAD_BALANCE = ON)(ADDRESS = (PROTOCOL = TCP)(HOST = vlp079chr.chrul.net)(PORT = 1521)))(CONNECT_DATA = (SERVICE_NAME = TRA_DIM_01_E)))","SERVEUR_CO":"vlp079chr.chrul.net","PORT_CO":"1521","SERVICE_CO":"TRA_DIM_01_E","COMMENTAIRE":null,"DATE_CREATION":null,"DATE_MAJ":"2020-11-18T13:24:06.000Z"}]
  *
  */
-async function post(req, res, next) {
-  try {
+async function post(req, res) {
+
+  console.log('je suis dans le post');
+
+    if (!req.body) {
+      res.status(400).send({
+        message: "Content can not be empty!"
+      });
+    }
+
+    console.log(req.body);
     let conDesc = getConnectionFromRec(req);
-    conDesc = await dimco.create(conDesc);
+    console.log(conDesc);
+  try{  
+    conDesc = await sia.create(conDesc);
     res.status(201).json(conDesc);
   } catch (err) {
     next(err);
@@ -113,10 +123,10 @@ async function post(req, res, next) {
 module.exports.post = post;
 
 /**
- * @api {put} /dimco/ Mise à jour d'une connexion
+ * @api {put} /sia/ Mise à jour d'une connexion
  * @apiVersion 1.0.0
  * @apiName PutConnection
- * @apiGroup dimco
+ * @apiGroup sia
  *
  * @apiParam {Number} ID_CO  Paramètres décrivant la connexion.
  * @apiParam {String} NOM_CO  Nom de la connexion
@@ -150,9 +160,9 @@ module.exports.post = post;
  */
 async function put(req, res, next) {
   try {
-    let conDesc = getConnectionFromRec(req);
-    conDesc.conId = parseInt(req.body.id_co, 10);
-    conDesc = await dimco.update(conDesc);
+     let conDesc = getConnectionFromRec(req);
+    //conDesc.conId = parseInt(req.body.util, 10);
+    conDesc = await sia.update(conDesc);
     if (conDesc !== null) {
       res.status(200).json(conDesc);
     } else {
@@ -166,10 +176,10 @@ async function put(req, res, next) {
 module.exports.put = put;
 
 /**
- * @api {del} /dimco/:id_con Suppression d'une connexion
+ * @api {del} /sia/:id_con Suppression d'une connexion
  * @apiVersion 1.0.0
  * @apiName DelConnection
- * @apiGroup dimco
+ * @apiGroup sia
  *
  * @apiParam {Number} id_co  Identifiant de la connexion.
  *
@@ -179,8 +189,9 @@ module.exports.put = put;
  */
  async function del(req, res, next) { // delete est un mot réservé
   try {
-    const conId = parseInt(req.query.id_co, 10);
-    const success = await dimco.delete(conId);
+    //const conId = parseInt(req.query.id_co, 10);
+    console.log(req.query.util)
+    const success = await sia.delete(req.query.util);
     if (success) {
       res.status(200).end();
     } else {

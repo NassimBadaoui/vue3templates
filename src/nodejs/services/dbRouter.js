@@ -1,13 +1,13 @@
 const express = require('express');
 const router = new express.Router();
-const dimco = require('../controllers/sia.js');
+const sia = require('../controllers/sia.js');
 
 
 router.route('/sia/') 
-  .get(dimco.get)
-  .post(dimco.post)
-  .put(dimco.put)
-  .delete(dimco.delete);
+  .get(sia.get)
+  .post(sia.post)
+  .put(sia.put)
+  .delete(sia.delete);
 
 
 module.exports = router;
